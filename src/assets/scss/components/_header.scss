@@ -1,0 +1,23 @@
+.header{
+    position: static;
+    height: auto;
+    @include media-breakpoint-up(md){
+        position: sticky;
+        top: 0;
+        height: 100vh;
+    } 
+}
+
+.form-control{
+    border-radius: 1rem;
+    &select{
+        appearance: none;
+        border: $gray-500;
+        border: 1px;
+        background-color: $white;
+    }
+    &input{
+        border: $gray-500;
+        border: 1px;
+    }
+}
