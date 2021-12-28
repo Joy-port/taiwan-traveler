@@ -6,8 +6,7 @@
         <div class="col-md-3 header">
           <div class="py-5 px-10 px-md-0 h-100 w-100">
             <div class="d-flex justify-content-between align-items-center mb-5">
-              <router-link
-                to="/"
+              <a href="#"
                 class="d-block w-100 text-center text-md-start"
               >
                 <img
@@ -15,7 +14,7 @@
                   alt="logo"
                   style="width: 116px"
                 />
-              </router-link>
+              </a>
               <button class="btn btn-outline-primary border-0 rounded-circle material-icons fs-6 h-20">
                 chevron_left
               </button>
@@ -81,12 +80,11 @@
                 href="#"
                 class="d-flex rounded-circle btn-outline-primary justify-content-center align-items-center position-absolute top-50 end-0 translate-middle-y me-2"
                 style="width: 35px; height: 35px"
-                @click="goSearch()"
               >
                 <span class="material-icons-outlined d-block"> search </span>
               </a>
             </div>
-            <button class="btn btn-primary w-100 rounded-3" @click="goSearch(selectedType, selectedCity, keyword )">
+            <button class="btn btn-primary w-100 rounded-3" @click="getSearchResultData">
               開始搜尋
             </button>
             <div class="pb-5 border-light border-bottom border-1 mb-5"></div>
@@ -199,12 +197,12 @@
                   >更多{{ selectedName }}</a
                 >
               </div>
-              <ul class="row mb-8" v-if="selectedName === '熱門景點'">
-                <router-link
+               {{selectedType}} {{selectedCity}} {{selectedData}}
+              <ul class="row mb-8" v-if="selectedType === 'ScenicSpot'">
+                <li
                   class="col-md-4 mb-5"
                   v-for="s in selectedData"
-                  :to="`/D/${s.ID}/`"
-                  :key="s.ID"
+                  :key="s.ScenicSpotID"
                 >
                   <div
                     class="card border-0 rounded-3 position-relative shadow h-100"
@@ -213,13 +211,13 @@
                       v-if="s.Picture.hasOwnProperty('PictureUrl1')"
                       :src="s.Picture.PictureUrl1"
                       :alt="s.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-50"
                     />
                     <img
                       v-else
                       src="@/assets/images/img.png"
                       alt="img"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-50"
                     />
                     <a
                       href="#"
@@ -228,7 +226,7 @@
                       share
                     </a>
                     <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ s.Name }}</h3>
+                      <h3 class="fs-7 fw-bold mb-3">{{ s.ScenicSpotName }}</h3>
                       <div class="d-flex flex-wrap text-nowrap gap-3">
                         <div class="d-flex me-3">
                           <span class="material-icons text-primary me-1">
@@ -236,36 +234,26 @@
                           </span>
                           <p class="fs-8">{{ s.City }}</p>
                         </div>
-                        <div class="d-flex me-3">
+                        <div class="d-flex me-3" v-if="s.OpenTime">
                           <span class="material-icons text-primary me-1">
                             watch_later
                           </span>
-                          <p
-                            v-if="
-                              s.OpenTime.textContent.contains('全年皆可') ||
-                              s.OpenTime.contains('每日')
-                            "
-                            class="fs-8"
-                          >
-                            全日開放 {{ s.OpenTime.split('，')[1] }}
+                          <p class="fs-8">
+                          {{ s.OpenTime }}
                           </p>
-                          <p v-else-if="s.OpenTime.length === 0" class="fs-8">
-                            全日開放
-                          </p>
-                          <p v-else class="fs-8">請點擊查看詳情</p>
                         </div>
                         <div class="d-flex me-3" v-if="s.Class1">
                           <span class="material-icons text-primary me-1">
                             local_offer
                           </span>
-                          <ul class="d-flex">
-                            <li v-if="s.Class1" class="badge bg-primary fs-8">
+                          <ul class="d-flex flex-wrap gap-3">
+                            <li v-if="s.Class1" class="badge bg-primary fs-8 fw-light">
                               {{ s.Class1 }}
                             </li>
-                            <li v-if="s.Class2" class="badge bg-primary fs-8">
+                            <li v-if="s.Class2 && s.Class2 !== s.Class1" class="badge bg-primary fs-8 fw-light">
                               {{ s.Class2 }}
                             </li>
-                            <li v-if="s.Class3" class="badge bg-primary fs-8">
+                            <li v-if="s.Class3 && s.Class3 !== s.Class2" class="badge bg-primary fs-8 fw-light">
                               {{ s.Class3 }}
                             </li>
                           </ul>
@@ -273,13 +261,13 @@
                       </div>
                     </div>
                   </div>
-                </router-link>
+                </li>
               </ul>
-              <ul class="row mb-8" v-else-if="selectedName === '觀光活動'">
-                <li class="col-md-4 mb-5" v-for="a in selectedData" :key="a.ID">
+              <ul class="row mb-8" v-else-if="selectedType === 'Activity'">
+                <li class="col-md-4 mb-5" v-for="a in selectedData" :key="a.ActivityID">
                   <div class="card border-0 rounded-3 position-relative shadow">
                     <img
-                      v-if="a.Picture.length !== 0"
+                      v-if="a.Picture.hasOwnProperty('PictureUrl1')"
                       :src="a.Picture.PictureUrl1"
                       :alt="a.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-40"
@@ -297,7 +285,7 @@
                       share
                     </a>
                     <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ a.Name }}</h3>
+                      <h3 class="fs-7 fw-bold mb-3">{{ a.ActivityName }}</h3>
                       <div class="d-flex me-3 mb-3">
                         <span class="material-icons text-primary me-1">
                           watch_later
@@ -310,16 +298,16 @@
                         </span>
                         <p class="fs-8">{{ a.Location }}</p>
                       </div>
-                      <div class="d-flex me-3" v-if="s.Class1">
+                      <div class="d-flex flex-wrap me-3" v-if="a.Class1">
                         <span class="material-icons text-primary me-1">
                           local_offer
                         </span>
-                        <ul class="d-flex">
-                          <li v-if="s.Class1" class="badge bg-primary fs-8">
-                            {{ s.Class1 }}
+                        <ul class="d-flex flex-wrap">
+                          <li v-if="a.Class1" class="badge bg-primary fs-8">
+                            {{ a.Class1 }}
                           </li>
-                          <li v-if="s.Class2" class="badge bg-primary fs-8">
-                            {{ s.Class2 }}
+                          <li v-if="a.Class2 && a.Class2 !== a.Class1" class="badge bg-primary ms-3 fs-8">
+                            {{ a.Class2 }}
                           </li>
                         </ul>
                       </div>
@@ -327,11 +315,11 @@
                   </div>
                 </li>
               </ul>
-              <ul class="row mb-8" v-else-if="selectedName === '美食品嚐'">
-                <li class="col-md-4" v-for="r in selectedData" :key="r.ID">
+              <ul class="row mb-8" v-else-if="selectedType === 'Restaurant'">
+                <li class="col-md-4" v-for="r in selectedData" :key="r.RestaurantID">
                   <div class="card border-0 rounded-3 position-relative shadow">
                     <img
-                      v-if="r.Picture.length !== 0"
+                      v-if="r.Picture.hasOwnProperty('PictureUrl1')"
                       :src="r.Picture.PictureUrl1"
                       :alt="r.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-40"
@@ -349,40 +337,40 @@
                       share
                     </a>
                     <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ r.Name }}</h3>
-                      <div class="d-flex me-3 mb-3">
+                      <h3 class="fs-7 fw-bold mb-3">{{ r.RestaurantName }}</h3>
+                      <div class="d-flex me-3 mb-3" v-if="r.OpenTime">
                         <span class="material-icons text-primary me-1">
                           watch_later
                         </span>
-                        <p
-                          v-if="
-                            r.OpenTime.textContent.contains('全年皆可') ||
-                            r.OpenTime.contains('每日')
-                          "
-                          class="fs-8"
-                        >
-                          全日開放 {{ r.OpenTime.split('，')[1] }}
+                        <p class="fs-8">
+                          {{ r.OpenTime }}
                         </p>
-                        <p v-else-if="r.OpenTime.length === 0" class="fs-8">
-                          全日開放
-                        </p>
-                        <p v-else class="fs-8">請點擊查看詳情</p>
                       </div>
-                      <div class="d-flex me-3">
+                      <div class="d-flex mb-3 me-3">
                         <span class="material-icons text-primary me-1">
                           place
                         </span>
                         <p class="fs-8">{{ r.Address }}</p>
                       </div>
+                      <div class="d-flex me-3" v-if="r.Class">
+                          <span class="material-icons text-primary me-1">
+                            local_offer
+                          </span>
+                          <ul class="d-flex flex-wrap">
+                            <li class="badge bg-primary fs-8 fw-light">
+                              {{ r.Class }}
+                            </li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </li>
               </ul>
-              <ul class="row mb-8" v-else>
-                <li class="col-md-4" v-for="h in selectedData" :key="h.ID">
+              <ul class="row mb-8" v-else-if="selectedType === 'Hotel'">
+                <li class="col-md-4" v-for="h in selectedData" :key="h.HotelID">
                   <div class="card border-0 rounded-3 position-relative shadow">
                     <img
-                      v-if="h.Picture.length !== 0"
+                      v-if="h.Picture.hasOwnProperty('PictureUrl1')"
                       :src="h.Picture.PictureUrl1"
                       :alt="h.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-40"
@@ -400,23 +388,34 @@
                       share
                     </a>
                     <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ h.Name }}</h3>
+                      <h3 class="fs-7 fw-bold mb-3">{{ h.HotelName }}</h3>
                       <div class="d-flex me-3 mb-3">
                         <span class="material-icons text-primary me-1">
                           call
                         </span>
                         <p class="fs-8">{{ h.Phone }}</p>
                       </div>
-                      <div class="d-flex me-3">
+                      <div class="d-flex mb-3 me-3">
                         <span class="material-icons text-primary me-1">
                           place
                         </span>
                         <p class="fs-8">{{ h.City }}</p>
                       </div>
+                      <div class="d-flex me-3" v-if="h.Class">
+                          <span class="material-icons text-primary me-1">
+                            local_offer
+                          </span>
+                          <ul class="d-flex flex-wrap">
+                            <li class="badge bg-primary fs-8 fw-light">
+                              {{ h.Class }}
+                            </li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </li>
               </ul>
+
             </div>
           </div>
         </div>
@@ -483,20 +482,18 @@ export default {
       const currentType = this.selectedType
       this.axios({
         method: 'get',
-        url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/${currentType}/${currentCity}?&$format=JSON`,
+        url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/${currentType}/${currentCity}?%24format=JSON`,
         headers: this.getAuthorizationHeader()
       })
         .then((res) => {
           this.selectedTotalData = res.data
           this.selectedTotalData.forEach((item) => {
-            item.Name = item.Name.replace(/_|ˍ/g, ' ')
+            const name = `${currentType}Name`
+            if (item[name].contains('_')) {
+              item[name] = item[name].replace(/_|ˍ/g, ' ')
+            }
           })
-          this.selectedData.push(
-            this.selectedTotalData.slice(
-              0,
-              this.selectedTotalData.length - this.qntShow
-            )
-          )
+          this.selectedData.push(this.selectedTotalData)
         })
         .catch((err) => {
           console.log(err.response)
