@@ -1,24 +1,2 @@
-# week-1
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+部署vue cli 到 github page 失敗
+https://tzuhui.github.io/2020/03/02/Vue/Vue-CLI3-to-github-pages/

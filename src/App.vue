@@ -92,18 +92,18 @@
             <ul class="d-flex flex-wrap justify-content-center gap-3">
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity, '觀光,遊憩')"
+                @click="goSearch('ScenicSpot', selectedCity, '體育健身類')"
               >
                 <img
                   class="mb-2"
                   src="./assets/images/icon/bike.svg"
-                  alt="觀光遊憩"
+                  alt="體育健身"
                 />
-                <p>觀光遊憩</p>
+                <p>體育健身</p>
               </li>
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity, '自然,風景')"
+                @click="goSearch('ScenicSpot', selectedCity, '自然風景類')"
               >
                 <img
                   class="mb-2"
@@ -114,14 +114,14 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('Restaurant', selectedCity, '地方特產')"
+                @click="goSearch('Restaurant', selectedCity, '中式美食')"
               >
                 <img
                   class="mb-2"
                   src="./assets/images/icon/activities.svg"
-                  alt="地方特產"
+                  alt="中式美食"
                 />
-                <p>地方特產</p>
+                <p>中式美食</p>
               </li>
               <li
                 class="btn"
@@ -196,7 +196,7 @@
               </div>
               <ul class="row mb-8" v-if="selectedType === 'ScenicSpot'">
                 <li
-                  class="col-md-4 mb-5"
+                  class="col-md-6 col-lg-4 mb-5"
                   v-for="s in selectedData"
                   :key="s.ScenicSpotID"
                 >
@@ -204,7 +204,7 @@
                     class="card border-0 rounded-3 position-relative shadow h-100"
                   >
                     <img
-                      v-if="s.Picture"
+                      v-if="s.Picture.PictureUrl1"
                       :src="s.Picture.PictureUrl1"
                       :alt="s.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-200"
@@ -260,10 +260,10 @@
                 </li>
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Activity'">
-                <li class="col-md-4 mb-5" v-for="a in selectedData" :key="a.ActivityID">
+                <li class="col-md-6 col-lg-4 mb-5" v-for="a in selectedData" :key="a.ActivityID">
                   <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="a.Picture"
+                      v-if="a.Picture.PictureUrl1"
                       :src="a.Picture.PictureUrl1"
                       :alt="a.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-200"
@@ -314,10 +314,10 @@
                 </li>
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Restaurant'">
-                <li class="col-md-4 mb-5" v-for="r in selectedData" :key="r.RestaurantID">
+                <li class="col-md-6 col-lg-4 mb-5" v-for="r in selectedData" :key="r.RestaurantID">
                   <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="r.Picture"
+                      v-if="r.Picture.PictureUrl1"
                       :src="r.Picture.PictureUrl1"
                       :alt="r.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-200"
@@ -367,10 +367,10 @@
                 </li>
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Hotel'">
-                <li class="col-md-4 mb-5" v-for="h in selectedData" :key="h.HotelID">
+                <li class="col-md-6 col-lg-4 mb-5" v-for="h in selectedData" :key="h.HotelID">
                   <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="h.Picture"
+                      v-if="h.Picture.PictureUrl1"
                       :src="h.Picture.PictureUrl1"
                       :alt="h.Picture.PictureDescription1"
                       class="card-img-obj rounded-top-3 h-200"
@@ -458,6 +458,7 @@ export default {
       end: 0,
       selectedTotalData: [],
       selectedData: [],
+      filterData: [],
       time: '',
       loadMore: false
     }
@@ -491,7 +492,6 @@ export default {
       this.selectedType = selected
       this.selectedCity = city || ''
       this.keyword = word
-      this.getSearchResultData()
     },
     getRegTime (time) {
       this.time = time
@@ -500,8 +500,8 @@ export default {
     getSearchResultData () {
       const currentCity = this.selectedCity
       const currentType = this.selectedType
+      const keywords = this.keyword || ''
       const url = 'https://ptx.transportdata.tw/MOTC/v2/Tourism'
-      console.log(currentCity, currentType)
       this.axios({
         method: 'get',
         url: `${url}/${currentType}${currentCity ? '/' : ''}${currentCity}?&$format=JSON`,
@@ -513,6 +513,18 @@ export default {
           this.loadMore = false
           const total = this.selectedTotalData.length
           const num = this.qnt
+          if (keywords) {
+            if (this.selectedType === 'ScenicSpot' || this.selectedType === 'Activity') {
+              this.filterData = this.selectedTotalData.filter(item => {
+                return item.Class1 === this.keyword || item.Class2 === this.keyword
+              })
+            } else {
+              this.filterData = this.selectedTotalData.filter(item => {
+                return item.Class === this.keyword
+              })
+            }
+            this.selectedTotalData = this.filterData
+          }
           for (let i = 0; i < num; i++) {
             this.selectedData.push(this.selectedTotalData[i])
           }
