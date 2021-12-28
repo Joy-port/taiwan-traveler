@@ -27,7 +27,7 @@
                 v-model="selectedType"
                 @click="getTypeName"
               >
-                <option value="" selected>請選擇類別（必填）</option>
+                <option value="" selected>請選擇類別</option>
                 <option v-for="t in typeData" :key="t.en" :value="t.en">
                   {{ t.name }}
                 </option>
@@ -49,7 +49,7 @@
                 v-model="selectedCity"
                 @click="getCityName"
               >
-                <option value="" selected>請選擇城市（選填）</option>
+                <option value="" selected>請選擇城市</option>
                 <option
                   v-for="city in cityData"
                   :key="city.CityID"
@@ -92,7 +92,7 @@
             <ul class="d-flex flex-wrap justify-content-center gap-3">
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity, '觀光,遊憩')"
+                @click="goSearch('ScenicSpot', selectedCity='', '觀光,遊憩')"
               >
                 <img
                   class="mb-2"
@@ -103,7 +103,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity, '自然,風景')"
+                @click="goSearch('ScenicSpot', selectedCity='', '自然,風景')"
               >
                 <img
                   class="mb-2"
@@ -114,7 +114,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('Restaurant', selectedCity, '地方特產')"
+                @click="goSearch('Restaurant', selectedCity='', '地方特產')"
               >
                 <img
                   class="mb-2"
@@ -125,7 +125,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('Restaurant', selectedCity, '異國料理')"
+                @click="goSearch('Restaurant', selectedCity='', '異國料理')"
               >
                 <img
                   class="mb-2"
@@ -134,7 +134,7 @@
                 />
                 <p>異國料理</p>
               </li>
-              <li class="btn" @click="goSearch('Hotel', selectedCity, '度假,民宿')">
+              <li class="btn" @click="goSearch('Hotel', selectedCity='', '度假,民宿')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/hotel.svg"
@@ -142,7 +142,7 @@
                 />
                 <p>青旅民宿</p>
               </li>
-              <li class="btn" @click="goSearch('Hotel', selectedCity, '國際,旅館')">
+              <li class="btn" @click="goSearch('Hotel', selectedCity='', '國際,旅館')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/believe.svg"
@@ -150,7 +150,7 @@
                 />
                 <p>飯店旅館</p>
               </li>
-              <li class="btn" @click="goSearch('Activity', selectedCity, '節慶活動')">
+              <li class="btn" @click="goSearch('Activity', selectedCity='', '節慶活動')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/historical.svg"
@@ -158,7 +158,7 @@
                 />
                 <p>節慶活動</p>
               </li>
-              <li class="btn" @click="goSearch('Activity', selectedCity, '藝文,體驗')">
+              <li class="btn" @click="goSearch('Activity', selectedCity='', '藝文,體驗')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/visits.svg"
@@ -197,7 +197,7 @@
                   >更多{{ selectedName }}</a
                 >
               </div>
-               {{selectedType}} {{selectedCity}} {{selectedData}}
+               {{selectedType}} {{selectedCity}} {{selectedData}} {{selectedTotalData}}
               <ul class="row mb-8" v-if="selectedType === 'ScenicSpot'">
                 <li
                   class="col-md-4 mb-5"
@@ -474,26 +474,22 @@ export default {
     },
     goSearch (selected, city, word = this.keyword.split(' ').join()) {
       this.selectedType = selected
-      this.selectedCity = city
+      this.selectedCity = city || ''
       this.keyword = word
+      this.getSearchResultData()
     },
     getSearchResultData () {
       const currentCity = this.selectedCity
       const currentType = this.selectedType
+      const url = 'https://ptx.transportdata.tw/MOTC/v2/Tourism'
       this.axios({
         method: 'get',
-        url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/${currentType}/${currentCity}?%24format=JSON`,
+        url: `${url}/${currentType}${currentCity ? '/' : ''}${currentCity}?&$format=JSON`,
         headers: this.getAuthorizationHeader()
       })
         .then((res) => {
           this.selectedTotalData = res.data
-          this.selectedTotalData.forEach((item) => {
-            const name = `${currentType}Name`
-            if (item[name].contains('_')) {
-              item[name] = item[name].replace(/_|ˍ/g, ' ')
-            }
-          })
-          this.selectedData.push(this.selectedTotalData)
+          this.selectedData.push(this.selectedTotalData.splice(0, this.selectedTotalData.length - this.qntShow))
         })
         .catch((err) => {
           console.log(err.response)

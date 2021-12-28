@@ -10,13 +10,13 @@
         "class": [ "歷史文化","戶外踏青","宗教巡禮","親子活動","風景區"]
     },
     {
-        "name":"住宿推薦",
-        "en":"Hotel",
+        "name":"美食品嚐",
+        "en":"Restaurant",
         "class": []
     },
     {
-        "name":"美食品嚐",
-        "en":"Restaurant",
+        "name":"住宿推薦",
+        "en":"Hotel",
         "class": []
     }
 ]
