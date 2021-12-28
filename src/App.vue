@@ -92,7 +92,7 @@
             <ul class="d-flex flex-wrap justify-content-center gap-3">
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity='', '觀光,遊憩')"
+                @click="goSearch('ScenicSpot', selectedCity, '觀光,遊憩')"
               >
                 <img
                   class="mb-2"
@@ -103,7 +103,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('ScenicSpot', selectedCity='', '自然,風景')"
+                @click="goSearch('ScenicSpot', selectedCity, '自然,風景')"
               >
                 <img
                   class="mb-2"
@@ -114,7 +114,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('Restaurant', selectedCity='', '地方特產')"
+                @click="goSearch('Restaurant', selectedCity, '地方特產')"
               >
                 <img
                   class="mb-2"
@@ -125,7 +125,7 @@
               </li>
               <li
                 class="btn"
-                @click="goSearch('Restaurant', selectedCity='', '異國料理')"
+                @click="goSearch('Restaurant', selectedCity, '異國料理')"
               >
                 <img
                   class="mb-2"
@@ -134,7 +134,7 @@
                 />
                 <p>異國料理</p>
               </li>
-              <li class="btn" @click="goSearch('Hotel', selectedCity='', '度假,民宿')">
+              <li class="btn" @click="goSearch('Hotel', selectedCity, '民宿')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/hotel.svg"
@@ -142,7 +142,7 @@
                 />
                 <p>青旅民宿</p>
               </li>
-              <li class="btn" @click="goSearch('Hotel', selectedCity='', '國際,旅館')">
+              <li class="btn" @click="goSearch('Hotel', selectedCity, '一般旅館')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/believe.svg"
@@ -150,7 +150,7 @@
                 />
                 <p>飯店旅館</p>
               </li>
-              <li class="btn" @click="goSearch('Activity', selectedCity='', '節慶活動')">
+              <li class="btn" @click="goSearch('Activity', selectedCity, '節慶活動')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/historical.svg"
@@ -158,7 +158,7 @@
                 />
                 <p>節慶活動</p>
               </li>
-              <li class="btn" @click="goSearch('Activity', selectedCity='', '藝文,體驗')">
+              <li class="btn" @click="goSearch('Activity', selectedCity, '藝文活動')">
                 <img
                   class="mb-2"
                   src="./assets/images/icon/visits.svg"
@@ -193,11 +193,7 @@
                   </h2>
                   <h2 v-else class="fs-5">旅遊景點</h2>
                 </div>
-                <a href="#" class="link-primary" @click.prevent="addShowDataQnt"
-                  >更多{{ selectedName }}</a
-                >
               </div>
-               {{selectedType}} {{selectedCity}} {{selectedData}} {{selectedTotalData}}
               <ul class="row mb-8" v-if="selectedType === 'ScenicSpot'">
                 <li
                   class="col-md-4 mb-5"
@@ -208,56 +204,56 @@
                     class="card border-0 rounded-3 position-relative shadow h-100"
                   >
                     <img
-                      v-if="s.Picture.hasOwnProperty('PictureUrl1')"
+                      v-if="s.Picture"
                       :src="s.Picture.PictureUrl1"
                       :alt="s.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-50"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <img
                       v-else
                       src="@/assets/images/img.png"
                       alt="img"
-                      class="card-img-obj rounded-top-3 h-50"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <a
-                      href="#"
+                      v-if="s.WebsiteUrl"
+                      :href="s.WebsiteUrl"
+                      target="_blank"
                       class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
                     >
                       share
                     </a>
                     <div class="px-3 py-2 text-break">
                       <h3 class="fs-7 fw-bold mb-3">{{ s.ScenicSpotName }}</h3>
-                      <div class="d-flex flex-wrap text-nowrap gap-3">
-                        <div class="d-flex me-3">
-                          <span class="material-icons text-primary me-1">
-                            place
-                          </span>
-                          <p class="fs-8">{{ s.City }}</p>
-                        </div>
-                        <div class="d-flex me-3" v-if="s.OpenTime">
-                          <span class="material-icons text-primary me-1">
-                            watch_later
-                          </span>
-                          <p class="fs-8">
-                          {{ s.OpenTime }}
-                          </p>
-                        </div>
-                        <div class="d-flex me-3" v-if="s.Class1">
-                          <span class="material-icons text-primary me-1">
-                            local_offer
-                          </span>
-                          <ul class="d-flex flex-wrap gap-3">
-                            <li v-if="s.Class1" class="badge bg-primary fs-8 fw-light">
-                              {{ s.Class1 }}
-                            </li>
-                            <li v-if="s.Class2 && s.Class2 !== s.Class1" class="badge bg-primary fs-8 fw-light">
-                              {{ s.Class2 }}
-                            </li>
-                            <li v-if="s.Class3 && s.Class3 !== s.Class2" class="badge bg-primary fs-8 fw-light">
-                              {{ s.Class3 }}
-                            </li>
-                          </ul>
-                        </div>
+                      <div class="d-flex mb-3 me-3">
+                        <span class="material-icons text-primary me-1">
+                          place
+                        </span>
+                        <p class="fs-8">{{ s.Address }}</p>
+                      </div>
+                      <div class="d-flex mb-3 me-3" v-if="s.OpenTime">
+                        <span class="material-icons text-primary me-1">
+                          watch_later
+                        </span>
+                        <p class="fs-8">
+                        {{ s.OpenTime }}
+                        </p>
+                      </div>
+                      <div class="d-flex me-3" v-if="s.Class1">
+                        <span class="material-icons text-primary me-1">
+                          local_offer
+                        </span>
+                        <ul class="d-flex flex-wrap">
+                          <li v-if="s.Class1" class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light">
+                            {{ s.Class1 }}
+                          </li>
+                          <li v-if="s.Class2 && s.Class2 !== s.Class1" class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light">
+                            {{ s.Class2 }}
+                          </li>
+                          <li v-if="s.Class3 && s.Class3 !== s.Class2" class="badge bg-primary p-1 fs-8 mb-2 fw-light">
+                            {{ s.Class3 }}
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -265,21 +261,23 @@
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Activity'">
                 <li class="col-md-4 mb-5" v-for="a in selectedData" :key="a.ActivityID">
-                  <div class="card border-0 rounded-3 position-relative shadow">
+                  <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="a.Picture.hasOwnProperty('PictureUrl1')"
+                      v-if="a.Picture"
                       :src="a.Picture.PictureUrl1"
                       :alt="a.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <img
                       v-else
                       src="@/assets/images/img.png"
                       alt="img"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <a
-                      href="#"
+                      v-if="a.WebsiteUrl"
+                      :href="a.WebsiteUrl"
+                      target="_blank"
                       class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
                     >
                       share
@@ -290,23 +288,23 @@
                         <span class="material-icons text-primary me-1">
                           watch_later
                         </span>
-                        <p class="fs-8">{{ a.StartTime }} ~ {{ a.EndTime }}</p>
+                        <p class="fs-8">{{ getRegTime(a.StartTime) }} ~ {{ getRegTime(a.EndTime) }}</p>
                       </div>
-                      <div class="d-flex me-3">
+                      <div class="d-flex mb-3 me-3">
                         <span class="material-icons text-primary me-1">
                           place
                         </span>
                         <p class="fs-8">{{ a.Location }}</p>
                       </div>
-                      <div class="d-flex flex-wrap me-3" v-if="a.Class1">
+                      <div class="d-flex me-3" v-if="a.Class1">
                         <span class="material-icons text-primary me-1">
                           local_offer
                         </span>
-                        <ul class="d-flex flex-wrap">
-                          <li v-if="a.Class1" class="badge bg-primary fs-8">
+                        <ul class="d-flex">
+                          <li v-if="a.Class1" class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light">
                             {{ a.Class1 }}
                           </li>
-                          <li v-if="a.Class2 && a.Class2 !== a.Class1" class="badge bg-primary ms-3 fs-8">
+                          <li v-if="a.Class2 && a.Class2 !== a.Class1" class="badge bg-primary p-1 mb-2 me-3 fs-8 fw-light">
                             {{ a.Class2 }}
                           </li>
                         </ul>
@@ -316,22 +314,24 @@
                 </li>
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Restaurant'">
-                <li class="col-md-4" v-for="r in selectedData" :key="r.RestaurantID">
-                  <div class="card border-0 rounded-3 position-relative shadow">
+                <li class="col-md-4 mb-5" v-for="r in selectedData" :key="r.RestaurantID">
+                  <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="r.Picture.hasOwnProperty('PictureUrl1')"
+                      v-if="r.Picture"
                       :src="r.Picture.PictureUrl1"
                       :alt="r.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <img
                       v-else
                       src="@/assets/images/img.png"
                       alt="img"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <a
-                      href="#"
+                      v-if="r.WebsiteUrl"
+                      :href="r.WebsiteUrl"
+                      target="_blank"
                       class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
                     >
                       share
@@ -356,8 +356,8 @@
                           <span class="material-icons text-primary me-1">
                             local_offer
                           </span>
-                          <ul class="d-flex flex-wrap">
-                            <li class="badge bg-primary fs-8 fw-light">
+                          <ul class="d-flex">
+                            <li class="badge bg-primary p-1 fs-8 fw-light">
                               {{ r.Class }}
                             </li>
                           </ul>
@@ -367,22 +367,24 @@
                 </li>
               </ul>
               <ul class="row mb-8" v-else-if="selectedType === 'Hotel'">
-                <li class="col-md-4" v-for="h in selectedData" :key="h.HotelID">
-                  <div class="card border-0 rounded-3 position-relative shadow">
+                <li class="col-md-4 mb-5" v-for="h in selectedData" :key="h.HotelID">
+                  <div class="card border-0 rounded-3 position-relative shadow h-100">
                     <img
-                      v-if="h.Picture.hasOwnProperty('PictureUrl1')"
+                      v-if="h.Picture"
                       :src="h.Picture.PictureUrl1"
                       :alt="h.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <img
                       v-else
                       src="@/assets/images/img.png"
                       alt="img"
-                      class="card-img-obj rounded-top-3 h-40"
+                      class="card-img-obj rounded-top-3 h-200"
                     />
                     <a
-                      href="#"
+                      v-if="h.WebsiteUrl"
+                      :href="h.WebsiteUrl"
+                      target="_blank"
                       class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
                     >
                       share
@@ -399,14 +401,14 @@
                         <span class="material-icons text-primary me-1">
                           place
                         </span>
-                        <p class="fs-8">{{ h.City }}</p>
+                        <p class="fs-8">{{ h.Address }}</p>
                       </div>
                       <div class="d-flex me-3" v-if="h.Class">
                           <span class="material-icons text-primary me-1">
                             local_offer
                           </span>
-                          <ul class="d-flex flex-wrap">
-                            <li class="badge bg-primary fs-8 fw-light">
+                          <ul class="d-flex">
+                            <li class="badge bg-primary p-1 fs-8 fw-light">
                               {{ h.Class }}
                             </li>
                           </ul>
@@ -415,7 +417,16 @@
                   </div>
                 </li>
               </ul>
-
+              <div class="text-center">
+                <a
+                  href="#"
+                  class="btn btn-outline-primary mb-5"
+                  v-show="loadMore"
+                  @click.prevent="loadMoreData"
+                >
+                  <span>讀取更多({{selectedData.length}}/{{selectedTotalData.length}})</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -442,9 +453,13 @@ export default {
       selectedCity: '',
       selectedCityName: '',
       keyword: '',
-      qntShow: 3,
+      qnt: 9,
+      start: 0,
+      end: 0,
       selectedTotalData: [],
-      selectedData: []
+      selectedData: [],
+      time: '',
+      loadMore: false
     }
   },
   computed: {
@@ -472,16 +487,21 @@ export default {
       })
       this.selectedName = typeName[0].name
     },
-    goSearch (selected, city, word = this.keyword.split(' ').join()) {
+    goSearch (selected, city, word) {
       this.selectedType = selected
       this.selectedCity = city || ''
       this.keyword = word
       this.getSearchResultData()
     },
+    getRegTime (time) {
+      this.time = time
+      return this.time.split('T')[0]
+    },
     getSearchResultData () {
       const currentCity = this.selectedCity
       const currentType = this.selectedType
       const url = 'https://ptx.transportdata.tw/MOTC/v2/Tourism'
+      console.log(currentCity, currentType)
       this.axios({
         method: 'get',
         url: `${url}/${currentType}${currentCity ? '/' : ''}${currentCity}?&$format=JSON`,
@@ -489,14 +509,47 @@ export default {
       })
         .then((res) => {
           this.selectedTotalData = res.data
-          this.selectedData.push(this.selectedTotalData.splice(0, this.selectedTotalData.length - this.qntShow))
+          this.selectedData = []
+          this.loadMore = false
+          const total = this.selectedTotalData.length
+          const num = this.qnt
+          for (let i = 0; i < num; i++) {
+            this.selectedData.push(this.selectedTotalData[i])
+          }
+          if (total > num) {
+            this.loadMore = true
+          }
+          console.log(this.selectedTotalData, this.selectedData, this.selectedTotalData.length)
         })
         .catch((err) => {
           console.log(err.response)
         })
     },
-    addShowDataQnt () {
-      this.qntShow += this.qntShow
+    loadMoreData () {
+      const total = this.selectedTotalData.length
+      const showNum = this.selectedData.length
+      let start = this.start
+      let end = this.end || this.qnt
+      const num = this.qnt
+      if (showNum < total) {
+        if ((total - showNum) >= num) {
+          start += num
+          end += num
+        } else {
+          const temNum = total - showNum
+          start += temNum
+          end += temNum
+          this.loadMore = false
+        }
+        for (let i = start; i < end; i++) {
+          this.selectedData.push(this.selectedTotalData[i])
+        }
+        this.start = start
+        this.end = end
+        console.log(start, end)
+      } else {
+        this.loadMore = false
+      }
     },
     getAuthorizationHeader () {
       const AppID = 'bbbf44c0e2534c17bbf5553afe5cfb24'
