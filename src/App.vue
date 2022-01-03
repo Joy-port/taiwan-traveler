@@ -185,7 +185,6 @@
         <!-- 右邊主題欄位 -->
         <div class="col-md-9 overflow-auto">
           <div class="py-10">
-            {{selectedData.hasProperty}} {{selectedData.length}}
             <img
               class="img-fluid mb-10"
               src="./assets/images/logo/banner.png"
