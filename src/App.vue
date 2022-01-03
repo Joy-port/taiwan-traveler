@@ -213,58 +213,14 @@
                       v-if="spot.Picture.PictureUrl1"
                       :src="spot.Picture.PictureUrl1"
                       :alt="spot.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-200"
+                      class="card-img-obj rounded-3 h-200"
                     />
                     <a
-                      v-if="spot.WebsiteUrl"
                       :href="spot.WebsiteUrl"
-                      target="_blank"
-                      class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
+                      class="d-flex position-absolute top-0 start-0 mt-3 me-3 link-white border border-0 rounded-3 px-5 py-3 stretched-link"
                     >
-                      share
+                      <h3 class="fs-7 fw-md text-end">{{ spot.ScenicSpotName }}</h3>
                     </a>
-                    <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ spot.ScenicSpotName }}</h3>
-                      <div class="d-flex mb-3 me-3">
-                        <span class="material-icons text-primary me-1">
-                          place
-                        </span>
-                        <p class="fs-8">{{ spot.Address }}</p>
-                      </div>
-                      <div class="d-flex mb-3 me-3" v-if="spot.OpenTime">
-                        <span class="material-icons text-primary me-1">
-                          watch_later
-                        </span>
-                        <p class="fs-8">
-                          {{ spot.OpenTime }}
-                        </p>
-                      </div>
-                      <div class="d-flex me-3" v-if="spot.Class1">
-                        <span class="material-icons text-primary me-1">
-                          local_offer
-                        </span>
-                        <ul class="d-flex flex-wrap">
-                          <li
-                            v-if="spot.Class1"
-                            class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light"
-                          >
-                            {{ spot.Class1 }}
-                          </li>
-                          <li
-                            v-if="spot.Class2 && spot.Class2 !== spot.Class1"
-                            class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light"
-                          >
-                            {{ spot.Class2 }}
-                          </li>
-                          <li
-                            v-if="spot.Class3 && spot.Class3 !== spot.Class2"
-                            class="badge bg-primary p-1 fs-8 mb-2 fw-light"
-                          >
-                            {{ spot.Class3 }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
                 </li>
               </ul>
@@ -289,53 +245,14 @@
                       v-if="act.Picture.PictureUrl1"
                       :src="act.Picture.PictureUrl1"
                       :alt="act.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-200"
+                      class="card-img-obj rounded-3 h-200"
                     />
                     <a
-                      v-if="act.WebsiteUrl"
                       :href="act.WebsiteUrl"
-                      target="_blank"
-                      class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
+                      class="d-flex position-absolute top-0 start-0 mt-3 me-3 link-white border border-0 rounded-3 px-5 py-3 stretched-link"
                     >
-                      share
+                      <h3 class="fs-7 fw-md text-end">{{ act.ActivityName }}</h3>
                     </a>
-                    <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ act.ActivityName }}</h3>
-                      <div class="d-flex me-3 mb-3">
-                        <span class="material-icons text-primary me-1">
-                          watch_later
-                        </span>
-                        <p class="fs-8">
-                          {{ getRegTime(act.StartTime) }} ~
-                          {{ getRegTime(act.EndTime) }}
-                        </p>
-                      </div>
-                      <div class="d-flex mb-3 me-3">
-                        <span class="material-icons text-primary me-1">
-                          place
-                        </span>
-                        <p class="fs-8">{{ act.Location }}</p>
-                      </div>
-                      <div class="d-flex me-3" v-if="act.Class1">
-                        <span class="material-icons text-primary me-1">
-                          local_offer
-                        </span>
-                        <ul class="d-flex">
-                          <li
-                            v-if="act.Class1"
-                            class="badge bg-primary p-1 fs-8 mb-2 me-3 fw-light"
-                          >
-                            {{ act.Class1 }}
-                          </li>
-                          <li
-                            v-if="act.Class2 && act.Class2 !== act.Class1"
-                            class="badge bg-primary p-1 mb-2 me-3 fs-8 fw-light"
-                          >
-                            {{ act.Class2 }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
                 </li>
               </ul>
@@ -360,43 +277,14 @@
                       v-if="res.Picture.PictureUrl1"
                       :src="res.Picture.PictureUrl1"
                       :alt="res.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-200"
+                      class="card-img-obj rounded-3 h-200"
                     />
                     <a
-                      v-if="res.WebsiteUrl"
                       :href="res.WebsiteUrl"
-                      target="_blank"
-                      class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
+                      class="d-flex position-absolute top-0 start-0 mt-3 me-3 link-white border border-0 rounded-3 px-5 py-3 stretched-link"
                     >
-                      share
+                      <h3 class="fs-7 fw-md text-end">{{ res.RestaurantName }}</h3>
                     </a>
-                    <div class="px-3 py-2 text-break">
-                      <h3 class="fs-7 fw-bold mb-3">{{ res.RestaurantName }}</h3>
-                      <div class="d-flex me-3 mb-3" v-if="res.OpenTime">
-                        <span class="material-icons text-primary me-1">
-                          watch_later
-                        </span>
-                        <p class="fs-8">
-                          {{ res.OpenTime }}
-                        </p>
-                      </div>
-                      <div class="d-flex mb-3 me-3">
-                        <span class="material-icons text-primary me-1">
-                          place
-                        </span>
-                        <p class="fs-8">{{ res.Address }}</p>
-                      </div>
-                      <div class="d-flex me-3" v-if="res.Class">
-                        <span class="material-icons text-primary me-1">
-                          local_offer
-                        </span>
-                        <ul class="d-flex">
-                          <li class="badge bg-primary p-1 fs-8 fw-light">
-                            {{ res.Class }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
                 </li>
               </ul>
@@ -421,41 +309,14 @@
                       v-if="hol.Picture.PictureUrl1"
                       :src="hol.Picture.PictureUrl1"
                       :alt="hol.Picture.PictureDescription1"
-                      class="card-img-obj rounded-top-3 h-200"
+                      class="card-img-obj rounded-3 h-200"
                     />
                     <a
-                      v-if="hol.WebsiteUrl"
                       :href="hol.WebsiteUrl"
-                      target="_blank"
-                      class="d-flex position-absolute top-0 end-0 mt-3 me-3 bg-primary2 link-white border border-0 rounded-3 material-icons p-3"
+                      class="d-flex position-absolute top-0 start-0 mt-3 me-3 link-white border border-0 rounded-3 px-5 py-3 stretched-link"
                     >
-                      share
-                    </a>
-                    <div class="px-3 py-2 text-break">
                       <h3 class="fs-7 fw-bold mb-3">{{ hol.HotelName }}</h3>
-                      <div class="d-flex me-3 mb-3">
-                        <span class="material-icons text-primary me-1">
-                          call
-                        </span>
-                        <p class="fs-8">{{ hol.Phone }}</p>
-                      </div>
-                      <div class="d-flex mb-3 me-3">
-                        <span class="material-icons text-primary me-1">
-                          place
-                        </span>
-                        <p class="fs-8">{{ hol.Address }}</p>
-                      </div>
-                      <div class="d-flex me-3" v-if="hol.Class">
-                        <span class="material-icons text-primary me-1">
-                          local_offer
-                        </span>
-                        <ul class="d-flex">
-                          <li class="badge bg-primary p-1 fs-8 fw-light">
-                            {{ hol.Class }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                    </a>
                   </div>
                 </li>
               </ul>
