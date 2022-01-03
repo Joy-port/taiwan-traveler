@@ -508,6 +508,7 @@ export default {
         headers: this.getAuthorizationHeader()
       })
         .then((res) => {
+          console.log('success', res.data)
           this.selectedTotalData = res.data
           this.selectedData = []
           this.loadMore = false
@@ -524,12 +525,13 @@ export default {
               })
             }
             this.selectedTotalData = this.filterData
-          }
-          for (let i = 0; i < num; i++) {
-            this.selectedData.push(this.selectedTotalData[i])
-          }
-          if (total > num) {
-            this.loadMore = true
+          } else {
+            for (let i = 0; i < num; i++) {
+              this.selectedData.push(this.selectedTotalData[i])
+            }
+            if (total > num) {
+              this.loadMore = true
+            }
           }
           console.log(this.selectedTotalData, this.selectedData, this.selectedTotalData.length)
         })
