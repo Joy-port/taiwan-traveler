@@ -88,6 +88,7 @@
               class="btn btn-primary w-100 rounded-3"
               @click="getSearchResultData"
             >
+            <!-- :class="{'disabled':selectedData}" -->
               開始搜尋
             </button>
             <div class="pb-5 border-light border-bottom border-1 mb-5"></div>
@@ -184,6 +185,7 @@
         <!-- 右邊主題欄位 -->
         <div class="col-md-9 overflow-auto">
           <div class="py-10">
+            {{selectedData.hasProperty}} {{selectedData.length}}
             <img
               class="img-fluid mb-10"
               src="./assets/images/logo/banner.png"
@@ -458,23 +460,9 @@
                   </div>
                 </li>
               </ul>
-              <div class="text-center">
-                <a
-                  href="#"
-                  class="btn btn-outline-primary mb-5"
-                  v-show="loadMore"
-                  @click.prevent="loadMoreData"
-                >
-                  <span
-                    >讀取更多({{ selectedData.length }}/{{
-                      selectedTotalData.length
-                    }})</span
-                  >
-                </a>
-              </div>
             </div>
             <!-- search 之後出現的內容資料 -->
-            <div class="px-5" v-if="!selectedData">
+            <div class="px-5" v-if="!renderInit">
               <div
                 class="d-flex justify-content-between align-items-center mb-5"
               >
@@ -889,23 +877,17 @@ export default {
       const url = 'https://ptx.transportdata.tw/MOTC/v2/Tourism'
       this.axios({
         method: 'get',
-        url: `${url}/${currentType}${
-          currentCity ? '/' : ''
-        }${currentCity}?&$format=JSON`,
+        url: `${url}/${currentType}${currentCity ? '/' : ''}${currentCity}?&$format=JSON`,
         headers: this.getAuthorizationHeader()
       })
         .then((res) => {
-          console.log('success', res.data)
           this.selectedTotalData = res.data
           this.selectedData = []
           this.loadMore = false
           const total = this.selectedTotalData.length
           const num = this.qnt
           if (keywords) {
-            if (
-              this.selectedType === 'ScenicSpot' ||
-              this.selectedType === 'Activity'
-            ) {
+            if (this.selectedType === 'ScenicSpot' || this.selectedType === 'Activity') {
               this.filterData = this.selectedTotalData.filter((item) => {
                 return (
                   item.Class1 === this.keyword || item.Class2 === this.keyword
@@ -917,6 +899,12 @@ export default {
               })
             }
             this.selectedTotalData = this.filterData
+            for (let i = 0; i < num; i++) {
+              this.selectedData.push(this.selectedTotalData[i])
+            }
+            if (total > num) {
+              this.loadMore = true
+            }
           } else {
             for (let i = 0; i < num; i++) {
               this.selectedData.push(this.selectedTotalData[i])
@@ -930,6 +918,11 @@ export default {
             this.selectedData,
             this.selectedTotalData.length
           )
+        })
+        .then((res2) => {
+          if (this.selectedData) {
+            this.renderInit = false
+          }
         })
         .catch((err) => {
           console.log(err.response)
