@@ -614,6 +614,9 @@
               </div>
             </div>
           </div>
+          <footer class="py-2 bg-primary">
+            <p class="text-center text-white"> Taiwan Traveler &copy; Design: <a href="https://2021.thef2e.com/users/6296427084285739194" class="align-baseline link-white">jhen</a> Develop: <a href="https://github.com/Joy-port/taiwan-traveler" class="align-baseline link-white">Joy Cheng</a> </p>
+          </footer>
         </div>
       </div>
     </div>
