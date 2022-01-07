@@ -9,7 +9,7 @@ cd dist
 git init 
 git add -A
 git commit -m 'deploy'
-# 部署到 https://github.com/Joy-port/travel-guide.git 分支為 gh-pages
-git push -f https://github.com/Joy-port/travel-guide.git master:gh-pages
+# 部署到 https://github.com/Joy-port/taiwan-traveler.git 分支為 gh-pages
+git push -f https://github.com/Joy-port/taiwan-traveler.git master:gh-pages
 
 cd -
